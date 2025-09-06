@@ -1,4 +1,5 @@
-import { generateToken } from "../../../Baatchit/server/lib/utils.js";
+// import { generateToken } from "../../../Baatchit/server/lib/utils.js";
+import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js"
