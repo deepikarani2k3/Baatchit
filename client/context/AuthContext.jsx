@@ -13,6 +13,13 @@ export const AuthProvider=({children})=>{
     const [authUser, setAuthUser]=useState(null);
     const [onlineUsers, setOnlineUsers]=useState([]);
     const [socket, setSocket]=useState(null);
+    useEffect(() => {
+  const savedUser = localStorage.getItem("authUser");
+  if (savedUser) {
+    setAuthUser(JSON.parse(savedUser));
+  }
+}, []);
+
 
     //check if user is authenticated and if so, set the user data and connect the socket
     const checkAuth= async()=>{
@@ -39,6 +46,7 @@ export const AuthProvider=({children})=>{
                 axios.defaults.headers.common["token"] =data.token;
                 setToken(data.token);
                 localStorage.setItem("token", data.token)
+                localStorage.setItem("authUser", JSON.stringify(data.userData));
                 toast.success(data.message)
             }
         } catch(error){
@@ -51,13 +59,15 @@ export const AuthProvider=({children})=>{
 
     const logout =async ()=>{
         localStorage.removeItem("token");
+        localStorage.removeItem("authUser");
         setToken(null);
         setAuthUser(null);
         setOnlineUsers([]);
+        delete axios.defaults.headers.common["token"];
         axios.defaults.headers.common["token"] = null;
-        toast.success("Logged out successfullyy")
-        socket.disconnect();
-        }
+        toast.success("Logged out successfully")
+        socket?.disconnect();
+        };
 
         //update profile function to handle user profile picture
 
@@ -93,8 +103,11 @@ export const AuthProvider=({children})=>{
     useEffect(()=>{
         if(token){
             axios.defaults.headers.common["token"] =token;
+            checkAuth();
+        }else {
+    delete axios.defaults.headers.common["token"];
         }
-    }, [])
+    }, [token]);
     const value={
         axios,
         authUser,
