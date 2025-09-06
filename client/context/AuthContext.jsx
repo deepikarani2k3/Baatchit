@@ -32,7 +32,7 @@ export const AuthProvider=({children})=>{
 
     const login = async(state, credentials)=>{
         try{
-            const{data} =await axios.post(`/api/auh/${state}`, credentials);
+            const{data} =await axios.post(`/api/auth/${state}`, credentials);
             if(data.success){                                
                 setAuthUser(data.userData);
                 connectSocket(data.userData);
@@ -103,6 +103,7 @@ export const AuthProvider=({children})=>{
         login,
         logout,
         updateProfile
+       
     }
     return(
         <AuthContext.Provider value ={value}>
