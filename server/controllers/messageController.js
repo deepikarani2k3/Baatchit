@@ -76,8 +76,7 @@ export const markMessageAsSeen = async (req, res) => {
 //send message to selected user
 export const sendMessage= async (req, res)=>{
     try{
-        const{text, image}=req.body;
-        const receiverId=req.body;
+        const{text, image, receiverId}=req.body;
         const senderId=req.user._id;
 
         let imageUrl;
@@ -101,7 +100,7 @@ export const sendMessage= async (req, res)=>{
         res.json({success: true,newMessage});
         }catch(error){
             console.log(error.message);
-            res.json({success:false, message:errorr.message})
+            res.json({success:false, message:error.message})
             
         }
     }
